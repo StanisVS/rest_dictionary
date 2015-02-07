@@ -12,6 +12,11 @@ class WordsController < ApplicationController
     render :text => "Required parameter missing: #{parameter_missing_exception.param}", :status => :bad_request
   end
 
+  rescue_from ActionController::UnknownHttpMethod do
+    render nothing: true , status: 405
+  end
+
+
   # GET /words
   # GET /words.json
   def index
@@ -50,7 +55,7 @@ class WordsController < ApplicationController
   def edit
     respond_to do |format|
       format.html
-      format.any { render :text => "Invalid format", :status => :not_acceptable}
+      format.any { render :text => "Invalid format", :status => :not_acceptable }
     end
   end
 
@@ -64,13 +69,13 @@ class WordsController < ApplicationController
         format.json { render :show, status: :created, location: @word }
         format.xml { render :xml => @word, status: :created, location: @word }
         format.text { render text: "word #{@word.name} with id=#{@word.id} created", status: :ok }
-        format.any { render :text => "Invalid format", :status => :not_acceptable}
+        format.any { render :text => "Invalid format", :status => :not_acceptable }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @word.errors, status: :unprocessable_entity }
         format.xml { render xml: @word.errors, status: :unprocessable_entity }
         format.text { render text: "#{@word.errors.each { |x, y| x }}", status: :unprocessable_entity }
-        format.any { render :text => "Invalid format", :status => :not_acceptable}
+        format.any { render :text => "Invalid format", :status => :not_acceptable }
       end
     end
   end
@@ -84,13 +89,13 @@ class WordsController < ApplicationController
         format.json { render :show, status: :ok, location: @word }
         format.xml { render :show, status: :ok, location: @word }
         format.text { render text: "word #{@word.name} with id=#{@word.id} updated", status: :ok }
-        format.any { render :text => "Invalid format", :status => :not_acceptable}
+        format.any { render :text => "Invalid format", :status => :not_acceptable }
       else
         format.html { render :edit }
         format.json { render json: @word.errors, status: :unprocessable_entity }
         format.xml { render xml: @word.errors, status: :unprocessable_entity }
         format.text { render text: "#{@word.errors.each { |x| x }}", status: :unprocessable_entity }
-        format.any { render :text => "Invalid format", :status => :not_acceptable}
+        format.any { render :text => "Invalid format", :status => :not_acceptable }
       end
     end
   end
@@ -103,8 +108,8 @@ class WordsController < ApplicationController
       format.html { redirect_to words_url, status: 303, notice: 'Word was successfully destroyed.' }
       format.json { head :no_content }
       format.xml { head :no_content }
-      format.text { render text: "#{@word.id} deleted",status: :no_content }
-      format.any { render :text => "Invalid format", :status => :not_acceptable}
+      format.text { render text: "#{@word.id} deleted", status: :no_content }
+      format.any { render :text => "Invalid format", :status => :not_acceptable }
     end
   end
 
@@ -121,7 +126,7 @@ class WordsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def word_params
     unless request.content_mime_type == "application/x-www-form-urlencoded" || request.content_mime_type == :json
-        render text:"unsuported input format", status: :forbidden
+      render text: "unsuported input format", status: :forbidden
     else
       params.require(:word)
       params[:word].require (:name)
