@@ -60,7 +60,7 @@ class WordsController < ApplicationController
     @word = Word.new(word_params)
     respond_to do |format|
       if @word.save
-        format.html { redirect_to @word, notice: 'Word was successfully created.' }
+        format.html { redirect_to @word, status: 303, notice: 'Word was successfully created.' }
         format.json { render :show, status: :created, location: @word }
         format.xml { render :xml => @word, status: :created, location: @word }
         format.text { render text: "word #{@word.name} with id=#{@word.id} created", status: :ok }
@@ -80,7 +80,7 @@ class WordsController < ApplicationController
   def update
     respond_to do |format|
       if @word.update(word_params)
-        format.html { redirect_to @word, notice: 'Word was successfully updated.' }
+        format.html { redirect_to @word, status: 303, notice: 'Word was successfully updated.' }
         format.json { render :show, status: :ok, location: @word }
         format.xml { render :show, status: :ok, location: @word }
         format.text { render text: "word #{@word.name} with id=#{@word.id} updated", status: :ok }
